@@ -69,6 +69,9 @@ RUN sh /usr/local/ssh/install-composer.sh && \
     a2enmod ssl && \
     a2enmod cache && \
     a2enmod expires && \
+    
+RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
+
 # Run apache on port 8080 instead of 80 due. On linux, ports under 1024 require admin privileges and we run apache as www-data.
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     chmod g+w /var/log/apache2 && \
@@ -78,7 +81,7 @@ RUN sh /usr/local/ssh/install-composer.sh && \
 
 COPY var/www/html/index.php /var/www/html/index.php
 
-EXPOSE 8080
+EXPOSE 8080 8443
 
 ## Add script to deal with Docker Secrets before starting apache
 COPY secrets.sh /usr/local/bin/secrets
@@ -92,3 +95,4 @@ ENV PROVISION_CONTEXT "production"
 
 ################################
 CMD ["startup"]
+ 
