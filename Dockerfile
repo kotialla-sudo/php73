@@ -53,6 +53,8 @@ COPY etc/apache2/conf-enabled/host.conf /etc/apache2/conf-enabled/host.conf
 COPY etc/apache2/apache2.conf /etc/apache2/apache2.conf
 COPY etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
+RUN service apache2 restart
+
 # PHP settings
 COPY etc/php/production.ini /usr/local/etc/php/conf.d/production.ini
 
