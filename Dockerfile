@@ -39,7 +39,7 @@ RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get install -y \
     && pecl install memcached \
     && pecl install timezonedb \
     && pecl install grpc \
-    && apt-get update && apt-get install libc-client-dev libkrb5-dev \
+    && apt-get update && apt-get install libc-client-dev libkrb5-dev -y \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-webp-dir=/usr/include/ --with-jpeg-dir=/usr/include/  \
     && docker-php-ext-configure zip --with-libzip \
