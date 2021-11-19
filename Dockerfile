@@ -61,7 +61,7 @@ COPY etc/php/production.ini /usr/local/etc/php/conf.d/production.ini
 # Composer
 RUN mkdir -p /usr/local/ssh
 COPY etc/ssh/* /usr/local/ssh/
-RUN sh /usr/local/ssh/install-composer.sh && \
+RUN ./usr/local/ssh/install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
     a2enmod proxy && \
     a2enmod proxy_http && \
@@ -75,7 +75,7 @@ RUN sh /usr/local/ssh/install-composer.sh && \
     a2enmod cache && \
     a2enmod expires && \
     
-RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
+ #RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
 
 # Run apache on port 8080 instead of 80 due. On linux, ports under 1024 require admin privileges and we run apache as www-data.
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
