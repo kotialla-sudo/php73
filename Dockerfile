@@ -44,13 +44,13 @@ RUN pecl install redis \
 
 # RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/*
 # RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-install imap \
-    && docker-php-ext-configure zip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && apt-get clean
+#    && docker-php-ext-install imap \
+#    && docker-php-ext-configure zip \
+#    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+#    && apt-get clean
 
 # RUN docker-php-ext-install gd calendar gmp ldap sysvmsg pcntl iconv bcmath xml mbstring pdo tidy gettext imap intl pdo_mysql mysqli simplexml xmlrpc xsl xmlwriter zip opcache exif sockets \
-    && printf "log_errors = On \nerror_log = /dev/stderr\n" > /usr/local/etc/php/conf.d/php-logs.ini
+#    && printf "log_errors = On \nerror_log = /dev/stderr\n" > /usr/local/etc/php/conf.d/php-logs.ini
 
 # Apache settings
 COPY etc/apache2/conf-enabled/host.conf /etc/apache2/conf-enabled/host.conf
