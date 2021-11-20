@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install libc-client-dev libkrb5-dev -y \
     && docker-php-ext-configure zip --with-libzip \
     && apt-get clean
 
-RUN docker-php-ext-install gd calendar gmp ldap sysvmsg pcntl iconv bcmath xml mbstring pdo tidy gettext imap intl pdo_mysql mysqli simplexml xmlrpc xsl xmlwriter zip opcache exif sockets \
+# RUN docker-php-ext-install gd calendar gmp ldap sysvmsg pcntl iconv bcmath xml mbstring pdo tidy gettext imap intl pdo_mysql mysqli simplexml xmlrpc xsl xmlwriter zip opcache exif sockets \
     && printf "log_errors = On \nerror_log = /dev/stderr\n" > /usr/local/etc/php/conf.d/php-logs.ini
 
 # Apache settings
