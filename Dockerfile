@@ -42,10 +42,10 @@ RUN pecl install redis \
     && pecl install grpc \
     && docker-php-ext-enable redis geoip apcu memcached timezonedb grpc 
 
-RUN apt-get update && apt-get install libc-client-dev libkrb5-dev -y \
+RUN apt-get update && apt-get install \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-webp-dir=/usr/include/ --with-jpeg-dir=/usr/include/  \
     && docker-php-ext-configure zip --with-libzip \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && apt-get clean
 
 # RUN docker-php-ext-install gd calendar gmp ldap sysvmsg pcntl iconv bcmath xml mbstring pdo tidy gettext imap intl pdo_mysql mysqli simplexml xmlrpc xsl xmlwriter zip opcache exif sockets \
