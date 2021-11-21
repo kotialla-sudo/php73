@@ -59,7 +59,7 @@ COPY etc/apache2/conf-enabled/host.conf /etc/apache2/conf-enabled/host.conf
 COPY etc/apache2/apache2.conf /etc/apache2/apache2.conf
 COPY etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
-RUN sudo service apache2 restart
+RUN service apache2 restart
 
 # PHP settings
 COPY etc/php/production.ini /usr/local/etc/php/conf.d/production.ini
@@ -99,7 +99,7 @@ RUN echo ${APACHE_RUN_GROUP}
 RUN chmod -R 777 /etc/apache2/envvars
 
 EXPOSE 8080 8443 443 80
-RUN sudo service httpd restart
+
 ## Add script to deal with Docker Secrets before starting apache
 COPY secrets.sh /usr/local/bin/secrets
 COPY startup.sh /usr/local/bin/startup
