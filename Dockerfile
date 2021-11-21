@@ -82,17 +82,21 @@ RUN /usr/local/ssh/install-composer.sh && \
     a2enmod ssl && \
     a2enmod cache && \
     a2enmod expires && \
-    
- #RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
-
 # Run apache on port 8080 instead of 80 due. On linux, ports under 1024 require admin privileges and we run apache as www-data.
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     chmod g+w /var/log/apache2 && \
     chmod 777 /var/lock/apache2 && \
     chmod 777 /var/run/apache2 && \
     echo "<?php echo phpinfo(); ?>" > /var/www/html/phpinfo.php
+# RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
 
 COPY var/www/html/index.php /var/www/html/index.php
+
+RUN echo ${APACHE_PID_FILE}
+RUN echo ${APACHE_RUN_USER}
+RUN echo ${APACHE_RUN_GROUP}
+
+RUN chmod -R 777 /etc/apache2/envvars
 
 EXPOSE 8080 8443 443 80
 
