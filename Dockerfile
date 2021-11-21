@@ -1,5 +1,8 @@
 FROM php:7.4-apache
 
+USER www-data
+RUN chown -R www-data:www-data
+
 # Setup Debian
 RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get -y install --no-install-recommends \
         unzip \
@@ -71,17 +74,17 @@ RUN pwd
 RUN chmod -R 777 /usr/local/ssh/install-composer.sh
 RUN /usr/local/ssh/install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
-    a2enmod proxy && \
-    a2enmod proxy_http && \
-    a2enmod proxy_ajp && \
-    a2enmod rewrite && \
-    a2enmod deflate && \
-    a2enmod headers && \
-    a2enmod proxy_balancer && \
-    a2enmod proxy_connect && \
-    a2enmod ssl && \
-    a2enmod cache && \
-    a2enmod expires && \
+#    a2enmod proxy && \
+#    a2enmod proxy_http && \
+#    a2enmod proxy_ajp && \
+#    a2enmod rewrite && \
+#    a2enmod deflate && \
+#    a2enmod headers && \
+#    a2enmod proxy_balancer && \
+#    a2enmod proxy_connect && \
+#    a2enmod ssl && \
+#    a2enmod cache && \
+#    a2enmod expires && \
 # Run apache on port 8080 instead of 80 due. On linux, ports under 1024 require admin privileges and we run apache as www-data.
     sed -i 's/Listen 80/Listen 8080/g' /etc/apache2/ports.conf && \
     chmod g+w /var/log/apache2 && \
@@ -89,6 +92,31 @@ RUN /usr/local/ssh/install-composer.sh && \
     chmod 777 /var/run/apache2 && \
     echo "<?php echo phpinfo(); ?>" > /var/www/html/phpinfo.php
 # RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
+
+RUN if which apache2 > /dev/null 2>&1; then \
+        sed -i -e 's#^export \([^=]\+\)=\(.*\)$#export \1=${\1:=\2}#' /etc/apache2/envvars \
+        # Apache - Enable mod rewrite and headers
+        && a2enmod headers rewrite \
+        # Apache - Disable useless configuration
+        && a2disconf serve-cgi-bin \
+        # Apache - remoteip module
+        && a2enmod remoteip \
+        && sed -i 's/%h/%a/g' /etc/apache2/apache2.conf \
+        && a2enconf remoteip \
+        # Apache - Hide version
+        && sed -i 's/^ServerTokens OS$/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf \
+        && a2enconf servername \
+        # Apache - Logging
+        && sed -i -e 's/vhost_combined/combined/g' -e 's/other_vhosts_access/access/g' /etc/apache2/conf-available/other-vhosts-access-log.conf \
+        # Apache- Prepare to be run as non root user
+        && mkdir -p /var/lock/apache2 /var/run/apache2 \
+        && chgrp -R 0 /var/lock/apache2 /var/log/apache2 /var/run/apache2 \
+        && chmod -R g=u /var/lock/apache2 /var/log/apache2 /var/run/apache2 \
+        && rm -f /var/log/apache2/*.log \
+        && ln -s /proc/self/fd/2 /var/log/apache2/error.log \
+        && ln -s /proc/self/fd/1 /var/log/apache2/access.log \
+        && sed -i -e 's/80/8080/g' -e 's/443/8443/g' /etc/apache2/ports.conf; \
+    fi
 
 COPY var/www/html/index.php /var/www/html/index.php
 
