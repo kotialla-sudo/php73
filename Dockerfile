@@ -65,7 +65,8 @@ COPY etc/php/production.ini /usr/local/etc/php/conf.d/production.ini
 # Composer
 RUN mkdir -p /usr/local/ssh
 COPY etc/ssh/* /usr/local/ssh/
-RUN ./usr/local/ssh/install-composer.sh && \
+RUN pwd
+RUN ./install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
     a2enmod proxy && \
     a2enmod proxy_http && \
