@@ -1,31 +1,38 @@
 FROM php:7.4-apache
 
 # Setup Debian
-RUN apt-get update \
-    && apt-get -y install --no-install-recommends \
-            g++ \
-            git \
-            curl \
-            gnupg2 \
-            imagemagick \
-            libcurl3-dev \
-            libicu-dev \
-            libfreetype6-dev \
-            libjpeg-dev \
-            libjpeg62-turbo-dev \
-            libmagickwand-dev \
-            libpq-dev \
-            libpng-dev \
-            libxml2-dev \
-            libzip-dev \
-            zlib1g-dev \
-            openssh-client \
-            nano \
-            unzip \
-            libcurl4-openssl-dev \
-            libssl-dev \
-            netcat \
-            runit \
+RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get -y install --no-install-recommends \
+        unzip \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libmemcached-dev \
+        libzip-dev \
+        libgeoip-dev \
+        libxml2-dev \
+        libxslt-dev \
+        libtidy-dev \
+        libssl-dev \
+        zlib1g-dev \
+        libpng-dev \
+        libwebp-dev \
+        libgmp-dev \
+        libjpeg-dev \
+        libfreetype6-dev \
+        libaio1 \
+        libldap2-dev \
+        apt-file \
+        wget \
+        vim \
+        gnupg \
+        gnupg2 \
+        zip \
+        git \
+        gcc \
+        g++ \
+        autoconf \
+        libc-dev \
+        pkg-config \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
     
