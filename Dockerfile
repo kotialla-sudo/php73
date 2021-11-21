@@ -94,7 +94,7 @@ RUN /usr/local/ssh/install-composer.sh && \
 
 COPY var/www/html/index.php /var/www/html/index.php
 
-EXPOSE 8080 8443
+EXPOSE 8080 8443 443 80
 
 ## Add script to deal with Docker Secrets before starting apache
 COPY secrets.sh /usr/local/bin/secrets
