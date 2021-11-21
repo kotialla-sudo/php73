@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 
 USER www-data
-RUN chown -R www-data:www-data
+RUN chown -R www-data:www-data /var/www/
 
 # Setup Debian
 RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get -y install --no-install-recommends \
