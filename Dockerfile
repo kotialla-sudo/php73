@@ -1,8 +1,5 @@
 FROM php:7.4-apache
 
-USER www-data
-RUN chown -R www-data:www-data /var/www/ && chmod -R 755 /var/www
-
 # Setup Debian
 RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get -y install --no-install-recommends \
         unzip \
@@ -47,8 +44,13 @@ RUN pecl install redis \
     && pecl install grpc \
     && docker-php-ext-enable redis geoip apcu memcached timezonedb grpc 
 
-# RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/*
-# RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+RUN docker-php-ext-configure zip
+RUN docker-php-ext-install zip
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    docker-php-ext-install imap
+
+# RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
+#    && RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 #    && docker-php-ext-install imap \
 #    && docker-php-ext-configure zip \
 #    && docker-php-ext-configure gd --with-freetype --with-jpeg \
