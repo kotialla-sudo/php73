@@ -103,7 +103,7 @@ RUN echo ${APACHE_RUN_GROUP}
 
 RUN chmod -R 777 /etc/apache2/envvars
 
-EXPOSE 8080
+EXPOSE 8585
 
 USER 1001
 
