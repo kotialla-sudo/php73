@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:7.3-apache
 
 # Setup Debian
 RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get -y install --no-install-recommends \
@@ -103,7 +103,7 @@ RUN echo ${APACHE_RUN_GROUP}
 
 RUN chmod -R 777 /etc/apache2/envvars
 
-EXPOSE 8080 8443 443 80
+EXPOSE 8080
 
 USER 1001
 
