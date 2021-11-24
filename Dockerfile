@@ -103,9 +103,7 @@ RUN echo ${APACHE_RUN_GROUP}
 
 RUN chmod -R 777 /etc/apache2/envvars
 
-EXPOSE 8585
-
-USER 1001
+EXPOSE 8080 8443
 
 ## Add script to deal with Docker Secrets before starting apache
 COPY secrets.sh /usr/local/bin/secrets
