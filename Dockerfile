@@ -49,6 +49,9 @@ RUN docker-php-ext-install zip
 # RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
 # RUN docker-php-ext-install imap
 
+RUN docker-php-ext-install gd calendar gmp ldap sysvmsg pcntl iconv bcmath xml mbstring pdo tidy gettext intl pdo_mysql mysqli simplexml xml xsl xmlwriter zip opcache exif sockets \
+    && printf "log_errors = On \nerror_log = /dev/stderr\n" > /usr/local/etc/php/conf.d/php-logs.ini
+
 # RUN apt-get update && apt-get install -y libc-client-dev libkrb5-dev && rm -r /var/lib/apt/lists/* \
 #    && RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
 #    && docker-php-ext-install imap \
@@ -64,15 +67,12 @@ COPY etc/apache2/conf-enabled/host.conf /etc/apache2/conf-enabled/host.conf
 COPY etc/apache2/apache2.conf /etc/apache2/apache2.conf
 COPY etc/apache2/sites-enabled/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
-# RUN service apache2 restart
-
 # PHP settings
 COPY etc/php/production.ini /usr/local/etc/php/conf.d/production.ini
 
 # Composer
 RUN mkdir -p /usr/local/ssh
 COPY etc/ssh/* /usr/local/ssh/
-RUN pwd
 RUN chmod -R 777 /usr/local/ssh/install-composer.sh
 RUN /usr/local/ssh/install-composer.sh && \
     mv composer.phar /usr/local/bin/composer && \
@@ -93,17 +93,11 @@ RUN /usr/local/ssh/install-composer.sh && \
     chmod 777 /var/lock/apache2 && \
     chmod 777 /var/run/apache2 && \
     echo "<?php echo phpinfo(); ?>" > /var/www/html/phpinfo.php
-# RUN sudo semanage port -a -t http_port_t -p tcp 443 80 8080 8443
 
 COPY var/www/html/index.php /var/www/html/index.php
 
-RUN echo ${APACHE_PID_FILE}
-RUN echo ${APACHE_RUN_USER}
-RUN echo ${APACHE_RUN_GROUP}
-
-RUN chmod -R 777 /etc/apache2/envvars
-
-EXPOSE 8080 8443
+EXPOSE 8080 
+EXPOSE 8443
 
 ## Add script to deal with Docker Secrets before starting apache
 COPY secrets.sh /usr/local/bin/secrets
